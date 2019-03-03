@@ -1,4 +1,4 @@
-box: gasbuddy/node-app:wercker-node8
+box: node:8
 
 build:
   steps:
@@ -10,38 +10,15 @@ build:
 
     - npm-test
 
-    - gasbuddy/production-build@1.0.0
+    - script:
+      name: build
+      code: npm run build
 
-ecr-deploy:
-  box:
-    id: gasbuddy/node-app:8-production
-    cmd: /bin/sh
-
+deploy:
   steps:
     - script:
-      name: Set AWS tag
-      code: export AWS_ECR_TAG=$(cat WERCKER_BUILD_ID)_$WERCKER_GIT_COMMIT
-
-    - gasbuddy/prepare-gasbuddy-deploy@2.0.0
-
-    - gasbuddy/publish-to-s3@1.1.2:
-        bucket: $AWS_S3_BUCKET
-        role: $AWS_S3_ROLE
-        src: $AWS_S3_SRC
-        pattern: '{*.js,*.map,*.css}'
-        extra-args: $AWS_S3_PUBLISH_EXTRA_ARGS
-
-    - internal/docker-push:
-        aws-access-key: $AWS_ACCESS_KEY_ID
-        aws-secret-key: $AWS_SECRET_ACCESS_KEY
-        aws-region: $AWS_REGION
-        aws-registry-id: $AWS_REGISTRY_ID
-        repository: $WERCKER_GIT_REPOSITORY
-        tag: $AWS_ECR_TAG
-        cmd: node-app
-
-deploy-staging:
-  steps:
-    - gasbuddy/deploy-to-staging@1.0.0:
-      service_name: $WERCKER_GIT_REPOSITORY
-      commit_sha: $WERCKER_GIT_COMMIT
+      name: npm publish
+      code: |
+        npm config set unsafe-perm true
+        echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        npm publish . --tag latest
