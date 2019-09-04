@@ -1,6 +1,6 @@
 {
   "name": "@gasbuddy/multi-source-pager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "build/index.js",
   "description": "Collate multiple search streams into one pageable data set",
   "private": true,
@@ -18,15 +18,15 @@
   "author": "GasBuddy <developers@gasbuddy.com>",
   "license": "MIT",
   "dependencies": {
-    "@babel/cli": "^7.2.0",
-    "vlq": "^1.0.0"
+    "@babel/cli": "^7.5.5",
+    "vlq": "^1.0.1"
   },
   "devDependencies": {
-    "@babel/register": "^7.0.0",
-    "babel-preset-gasbuddy": "^5.2.0",
-    "cross-env": "^5.2.0",
-    "eslint-config-gasbuddy": "^5.0.3",
-    "tap": "^12.5.3"
+    "@babel/register": "^7.5.5",
+    "babel-preset-gasbuddy": "^5.6.0",
+    "cross-env": "^5.2.1",
+    "eslint-config-gasbuddy": "^5.3.0",
+    "tap": "^14.6.1"
   },
   "nyc": {
     "include": [
